@@ -115,8 +115,8 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  button("Abrir", 140, 50),
-                  button("Proximo", 150, 50),
+                  //button("Abrir", 140, 50),
+                  //button("Proximo", 150, 50),
                 ],
               ),
             )
