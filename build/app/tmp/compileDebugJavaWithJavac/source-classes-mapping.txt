@@ -1,0 +1,6 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/projetofetin/projetofetin/BuildConfig.java
+ com.projetofetin.projetofetin.BuildConfig
+com/projetofetin/projetofetin/MainActivity.java
+ com.projetofetin.projetofetin.MainActivity
