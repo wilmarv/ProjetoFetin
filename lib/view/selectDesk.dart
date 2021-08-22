@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projetofetin/componentes/TextField.dart';
+import 'package:projetofetin/componentes/textField.dart';
 import 'package:projetofetin/constants/fontSize.dart';
 import 'package:projetofetin/componentes/button.dart';
 
@@ -55,9 +55,9 @@ class ViewSelectDesk extends StatelessWidget {
                               fontStyle: FontStyle.italic),
                         ),
                         Divider(color: Colors.transparent),
-                        textField("Guiche", false, TextInputType.number),
+                       // textField("Guiche", false, TextInputType.number),
                         Divider(color: Colors.transparent),
-                        button("Gerar Senha", weightMobile * 0.65, 50)
+                       // button("Gerar Senha", weightMobile * 0.65, 50)
                       ],
                     ),
                   ),

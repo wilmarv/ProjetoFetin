@@ -69,7 +69,7 @@ class _ViewQueueState extends State<ViewQueue> {
                         Text("Tempo de espera médio: XX mins",
                             style: TextStyle(fontSize: fontSize().texto)),
                         Divider(color: Colors.transparent),
-                        button("Gerar Senha", weightMobile * 0.65, 50)
+                        //button("Gerar Senha", weightMobile * 0.65, 50)
                       ],
                     ),
                   ),
