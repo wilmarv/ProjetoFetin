@@ -1,8 +1,25 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projetofetin\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projeto40Fetin\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
+                {
+                    "source": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projeto40Fetin\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,198,279,383,491,611,713",
+                        "endColumns": "142,80,103,107,119,101,78",
+                        "endOffsets": "193,274,378,486,606,708,787"
+                    },
+                    "to": {
+                        "startLines": "111,112,113,114,115,116,117",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "8183,8326,8407,8511,8619,8739,8841",
+                        "endColumns": "142,80,103,107,119,101,78",
+                        "endOffsets": "8321,8402,8506,8614,8734,8836,8915"
+                    }
+                },
                 {
                     "source": "C:\\Users\\WilmarVitorFonseca\\.gradle\\caches\\transforms-2\\files-2.1\\6f85801b133bda11abab227f4bb5a2fc\\jetified-play-services-basement-17.1.0\\res\\values\\values.xml",
                     "from": {
@@ -21,24 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projetofetin\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55,198,279,383,491,611,713",
-                        "endColumns": "142,80,103,107,119,101,78",
-                        "endOffsets": "193,274,378,486,606,708,787"
-                    },
-                    "to": {
-                        "startLines": "111,112,113,114,115,116,117",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "8183,8326,8407,8511,8619,8739,8841",
-                        "endColumns": "142,80,103,107,119,101,78",
-                        "endOffsets": "8321,8402,8506,8614,8734,8836,8915"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projetofetin\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\WilmarVitorFonseca\\StudioProjects\\projeto40Fetin\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
