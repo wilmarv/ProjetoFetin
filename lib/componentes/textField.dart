@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:projetofetin/constants/fontSize.dart';
 
-Widget textField(String label,bool passworld,TextInputType keyboardType,TextEditingController controller){
+Widget textField(String label,bool passworld,TextInputType keyboardType,
+    TextEditingController controller, TextInputAction textInputAction){
   RegExp regexNome = new RegExp(r"[A-Za-z]+( [A-Za-z]*)*");
   RegExp regexEmail = new RegExp(r"([\w\.\-]+)@([\w\-]+)((\.(\w)+))?((\.(\w){2,3}))*");
 
@@ -18,7 +19,7 @@ Widget textField(String label,bool passworld,TextInputType keyboardType,TextEdit
     obscureText: passworld,
     cursorColor: Colors.black,
     cursorHeight: 28,
-    keyboardType:keyboardType ,
+    keyboardType:keyboardType,
     validator: (value){
       if(value == null || value.isEmpty)return "Campo "+label+" é obrigatorio!";
       if(keyboardType == TextInputType.name){
@@ -34,5 +35,6 @@ Widget textField(String label,bool passworld,TextInputType keyboardType,TextEdit
         return null;
       }
     },
+    textInputAction:textInputAction ,
   );
 }
