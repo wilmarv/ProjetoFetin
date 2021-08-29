@@ -137,8 +137,6 @@ class _ViewLoginState extends State<ViewLogin> {
       backgroundColor: Colors.green,
       duration: Duration(seconds: 4),
     ));
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => ViewMain()));
   }
 
   void _onFail() {

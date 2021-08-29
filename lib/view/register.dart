@@ -59,13 +59,13 @@ class _ViewRegisterState extends State<ViewRegister> {
                         _nomeController, TextInputAction.next),
                     Divider(color: Colors.transparent, height: 10),
                     textField("email", false, TextInputType.emailAddress,
-                        _emailController,TextInputAction.next),
+                        _emailController, TextInputAction.next),
                     Divider(color: Colors.transparent, height: 10),
                     textField("Senha", true, TextInputType.visiblePassword,
-                        _senhaController,TextInputAction.next),
+                        _senhaController, TextInputAction.next),
                     Divider(color: Colors.transparent, height: 10),
                     textField("Matricula", false, TextInputType.number,
-                        _matriculaController,TextInputAction.next),
+                        _matriculaController, TextInputAction.next),
                     Divider(color: Colors.transparent, height: 10),
                     button("Registre-se", 300, 50, () {
                       if (_formKey.currentState!.validate()) {
@@ -94,8 +94,7 @@ class _ViewRegisterState extends State<ViewRegister> {
       backgroundColor: Colors.green,
       duration: Duration(seconds: 4),
     ));
-    Future.delayed(Duration(seconds: 5))
-        .then((value) => Navigator.of(context).pop());
+    Navigator.of(context).pop();
   }
 
   void _onFail() {

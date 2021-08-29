@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projetofetin/componentes/button.dart';
+import 'package:projetofetin/componentes/loading.dart';
 import 'package:projetofetin/constants/fontSize.dart';
+import 'package:projetofetin/model/user_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ViewWorkDesk extends StatefulWidget {
   const ViewWorkDesk({Key? key}) : super(key: key);
@@ -10,13 +14,14 @@ class ViewWorkDesk extends StatefulWidget {
 }
 
 class _ViewWorkDeskState extends State<ViewWorkDesk> {
+  final _fireStore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     double weightMobile = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        title:Text(
+        title: Text(
           "Senha Digital",
           style: TextStyle(
               fontStyle: FontStyle.italic, fontSize: fontSize().titulo26),
@@ -57,57 +62,7 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
                         )),
                   ),
                 ),
-                Card(
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("001",
-                                style:
-                                    TextStyle(fontSize: fontSize().titulo16)),
-                            Text("Wilmar Vitor Fonseca",
-                                style:
-                                    TextStyle(fontSize: fontSize().titulo16)),
-                            Text("1332",
-                                style:
-                                    TextStyle(fontSize: fontSize().titulo16)),
-                          ],
-                        ))),
-                Card(
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("002",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                            Text("Daniel Coelho",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                            Text("1346",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                          ],
-                        ))),
-                Card(
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("003",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                            Text("Francisco",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                            Text("1352",
-                                style:
-                                TextStyle(fontSize: fontSize().titulo16)),
-                          ],
-                        )))
+                Lista(_fireStore),
               ],
             ),
             Container(
@@ -115,8 +70,8 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //button("Abrir", 140, 50),
-                  //button("Proximo", 150, 50),
+                  button("Abrir", 140, 50, () {}),
+                  button("Proximo", 150, 50, () {}),
                 ],
               ),
             )
@@ -125,4 +80,46 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
       ),
     );
   }
+}
+
+Widget Lista(firestore) {
+  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    stream: firestore.collection("fila").snapshots(),
+    builder: (context, snapshot) {
+      switch (snapshot.connectionState) {
+        case ConnectionState.waiting:
+        case ConnectionState.none:
+          return Center(child: CircularProgressIndicator());
+        default:
+          QuerySnapshot<Map<String, dynamic>>? doc = snapshot.data;
+          int tamanhoFila = doc?.size != null ? (doc!.size - 1) : 0;
+          return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount:tamanhoFila,
+              itemBuilder: (context, index) {
+                int senha = doc?.docs[index].get("senha");
+                String nome = doc?.docs[index].get("nome");
+                String matricula = doc?.docs[index].get("matricula");
+                return Card(
+                    child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("${senha}",
+                                style:
+                                    TextStyle(fontSize: fontSize().titulo16)),
+                            Text(nome,
+                                style:
+                                    TextStyle(fontSize: fontSize().titulo16)),
+                            Text(matricula,
+                                style:
+                                    TextStyle(fontSize: fontSize().titulo16)),
+                          ],
+                        )));
+              });
+      }
+    },
+  );
 }

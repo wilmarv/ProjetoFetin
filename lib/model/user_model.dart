@@ -10,6 +10,8 @@ class UsuarioModel extends Model {
   Map<String, dynamic> userData = Map();
 
   bool isLoading = false;
+  int? senha;
+  String? guiche;
 
 
   @override

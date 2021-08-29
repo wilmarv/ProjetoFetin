@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projetofetin/constants/fontSize.dart';
 import 'package:projetofetin/model/user_model.dart';
-import 'package:projetofetin/view/login.dart';
 import 'package:projetofetin/view/queue.dart';
 import 'package:projetofetin/view/selectDesk.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -16,6 +16,7 @@ class ViewMain extends StatefulWidget {
 class _ViewMainState extends State<ViewMain> {
   final _guicheController = TextEditingController();
   final _formGuicheKey = GlobalKey<FormState>();
+  final _fireStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +32,12 @@ class _ViewMainState extends State<ViewMain> {
               icon: Icon(Icons.exit_to_app_outlined),
               onPressed: () {
                 ScopedModel.of<UsuarioModel>(context).singOut();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => ViewLogin()));
               })
         ],
       ),
       body: ScopedModel.of<UsuarioModel>(context).userData["adm"]
           ? ViewSelectDesk(context, _guicheController, _formGuicheKey)
-          : ViewQueue(),
+          : ViewQueue(context,_fireStore),
     );
   }
 }

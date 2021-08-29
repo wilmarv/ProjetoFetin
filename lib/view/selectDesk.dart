@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projetofetin/componentes/textField.dart';
 import 'package:projetofetin/constants/fontSize.dart';
 import 'package:projetofetin/componentes/button.dart';
+import 'package:projetofetin/model/user_model.dart';
 import 'package:projetofetin/view/workDesk.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 Widget ViewSelectDesk(context,_guicheController,_formGuicheKey) {
   double weightMobile = MediaQuery.of(context).size.width;
@@ -47,7 +49,7 @@ Widget ViewSelectDesk(context,_guicheController,_formGuicheKey) {
                       Divider(color: Colors.transparent),
                       button("Gerar Senha", weightMobile * 0.65, 50, () {
                         if (_formGuicheKey.currentState!.validate()) {
-
+                          ScopedModel.of<UsuarioModel>(context).guiche =_guicheController.text;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
