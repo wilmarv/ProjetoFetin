@@ -64,7 +64,7 @@ class _ViewPanelState extends State<ViewPanel> {
                             children: [
                               Divider(color: Colors.transparent),
                               Text(
-                                senhaAtual,
+                                senhaAtual.padLeft(3,"0"),
                                 style: TextStyle(
                                     color: Colors.blueGrey,
                                     fontSize: fontSize().titulo36,
@@ -81,7 +81,7 @@ class _ViewPanelState extends State<ViewPanel> {
                               ),
                               Divider(color: Colors.transparent),
                               Text(
-                                guicheAtual,
+                                guicheAtual.padLeft(2,"0"),
                                 style: TextStyle(
                                     color: Colors.blueGrey,
                                     fontSize: fontSize().titulo36,
@@ -111,7 +111,7 @@ class _ViewPanelState extends State<ViewPanel> {
                             children: [
                               Divider(color: Colors.transparent),
                               Text(
-                                senhaUsuario,
+                                senhaUsuario.padLeft(3,"0"),
                                 style: TextStyle(
                                     color: Colors.blueGrey,
                                     fontSize: fontSize().titulo36,
@@ -147,7 +147,7 @@ class _ViewPanelState extends State<ViewPanel> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          senhaAnterior,
+                                          senhaAnterior.padLeft(3,"0"),
                                           style: TextStyle(
                                             color: Colors.blueGrey,
                                             fontSize: fontSize().titulo32,
@@ -176,7 +176,7 @@ class _ViewPanelState extends State<ViewPanel> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          guicheAnterior,
+                                          guicheAnterior.padLeft(2,"0"),
                                           style: TextStyle(
                                               color: Colors.blueGrey,
                                               fontSize: fontSize().titulo32,

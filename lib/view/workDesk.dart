@@ -135,7 +135,7 @@ Widget listarFila(firestore) {
               shrinkWrap: true,
               itemCount: tamanhoFila,
               itemBuilder: (context, index) {
-                int senha = doc?.docs[index + 1].get("senha");
+                String? senha = doc?.docs[index + 1].get("senha").toString();
                 String nome = doc?.docs[index + 1].get("nome");
                 String matricula = doc?.docs[index + 1].get("matricula");
                 return Card(
@@ -144,7 +144,7 @@ Widget listarFila(firestore) {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("${senha}",
+                            Text(senha!.padLeft(3,"0"),
                                 style:
                                     TextStyle(fontSize: fontSize().titulo16)),
                             Text(nome,

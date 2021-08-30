@@ -74,7 +74,7 @@ Widget ViewQueue(BuildContext context, FirebaseFirestore fireStore) {
                                               fontStyle: FontStyle.italic),
                                         ),
                                         Divider(color: Colors.transparent),
-                                        Text(tamanhoFila,
+                                        Text(tamanhoFila.padLeft(2,"0"),
                                             style: TextStyle(
                                                 color: Colors.blueGrey,
                                                 fontSize: fontSize().titulo36,
