@@ -39,99 +39,122 @@ class _ViewLoginState extends State<ViewLogin> {
           ],
         ),
       ),
-      body: ScopedModel.of<UsuarioModel>(context).isLoading
+      body: ScopedModel
+          .of<UsuarioModel>(context)
+          .isLoading
           ? containerLoading()
           : SingleChildScrollView(
-              child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.white, Colors.blueGrey])),
-              padding: EdgeInsets.all(15),
-              child: Form(
-                key: _formLoginKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: 150,
-                      child: Image.asset(
-                        "images/Logo40Fetin.png",
-                      ),
+          child: Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.9,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.white, Colors.blueGrey])),
+            padding: EdgeInsets.all(15),
+            child: Form(
+              key: _formLoginKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 150,
+                    child: Image.asset(
+                      "images/Logo40Fetin.png",
                     ),
-                    Column(
-                      children: [
-                        textField("email", false, TextInputType.emailAddress,
-                            _emailLoginController, TextInputAction.next),
-                        Divider(color: Colors.transparent, height: 20),
-                        textField("Senha", true, TextInputType.visiblePassword,
-                            _senhaController, TextInputAction.done),
-                        Divider(color: Colors.transparent, height: 20),
-                        Container(
-                          alignment: Alignment.centerRight,
+                  ),
+                  Column(
+                    children: [
+                      textField("email", false, TextInputType.emailAddress,
+                          _emailLoginController, TextInputAction.next),
+                      Divider(color: Colors.transparent, height: 20),
+                      textField("Senha", true, TextInputType.visiblePassword,
+                          _senhaController, TextInputAction.done),
+                      Divider(color: Colors.transparent, height: 20),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
                           child: Text(
                             "Esqueci a senha! ",
                             style: TextStyle(
                                 fontSize: fontSize().texto,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                                 fontStyle: FontStyle.italic),
                           ),
-                        ),
-                        Divider(color: Colors.transparent, height: 20),
-                        button("Entrar", 300, 50, () {
-                          if (_formLoginKey.currentState!.validate()) {
-                            ScopedModel.of<UsuarioModel>(context).singIn(
-                                _emailLoginController.text,
-                                _senhaController.text,
-                                _onSuccess,
-                                _onFail);
-                          }
-                        }),
-                        Divider(color: Colors.transparent, height: 20),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          child: Column(
-                            children: [
-                              Text(
-                                "Ainda não possuim uma conta?",
-                                style: TextStyle(
-                                    fontSize: fontSize().texto,
-                                    color: Colors.black,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                              Text(
-                                "Cadastra-se!",
-                                style: TextStyle(
-                                    fontSize: fontSize().texto,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            ],
-                          ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ViewRegister()));
+                            if (_emailLoginController.text!="")
+                              ScopedModel.of<UsuarioModel>(context)
+                                  .passowordChange(_emailLoginController.text,
+                                  _onSuccessResetPassword,
+                                  _onFailResetPassword);
+                            else
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        "Por Favor Preencha o campo e-mail!"),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 4),
+                                  ));
                           },
                         ),
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                      Divider(color: Colors.transparent, height: 20),
+                      button("Entrar", 300, 50, () {
+                        if (_formLoginKey.currentState!.validate()) {
+                          ScopedModel.of<UsuarioModel>(context).singIn(
+                              _emailLoginController.text,
+                              _senhaController.text,
+                              _onSuccessLogin,
+                              _onFailLogin);
+                        }
+                      }),
+                      Divider(color: Colors.transparent, height: 20),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Ainda não possuim uma conta?",
+                              style: TextStyle(
+                                  fontSize: fontSize().texto,
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                            Text(
+                              "Cadastra-se!",
+                              style: TextStyle(
+                                  fontSize: fontSize().texto,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic),
+                            )
+                          ],
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewRegister()));
+                        },
+                      ),
+                    ],
+                  )
+                ],
               ),
-            )),
+            ),
+          )),
     );
   }
 
-  void _onSuccess() {
+  void _onSuccessLogin() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Login efetuado com sucesso!"),
       backgroundColor: Colors.green,
@@ -139,9 +162,25 @@ class _ViewLoginState extends State<ViewLogin> {
     ));
   }
 
-  void _onFail() {
+  void _onFailLogin() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Falha na tentativa de conectar!"),
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 4),
+    ));
+  }
+
+  void _onSuccessResetPassword() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("O Link para restaurar a senha foi enviado para o e-mail!"),
+      backgroundColor: Colors.green,
+      duration: Duration(seconds: 4),
+    ));
+  }
+
+  void _onFailResetPassword() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Falha na tentativa de restauração da senha!"),
       backgroundColor: Colors.red,
       duration: Duration(seconds: 4),
     ));

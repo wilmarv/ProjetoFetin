@@ -42,64 +42,119 @@ Widget ViewQueue(BuildContext context, FirebaseFirestore fireStore) {
                           default:
                             QuerySnapshot<Map<String, dynamic>>? doc =
                                 snapshot.data;
-                            int tamanhoDocumento = doc?.size != null?(doc!.size - 1):0;
-                            String tamanhoFila = doc?.size != null?(doc!.size - 1).toString():" ";
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Pessoas na fila:",
-                                  style: TextStyle(
-                                      color: Colors.blueGrey,
-                                      fontSize: fontSize().titulo36,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                Divider(color: Colors.transparent),
-                                Text(tamanhoFila,
-                                    style: TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontSize: fontSize().titulo36,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic)),
-                                Text("Tempo de espera médio: XX mins",
-                                    style:
-                                        TextStyle(fontSize: fontSize().texto)),
-                                Divider(color: Colors.transparent),
-                                button("Gerar Senha", widthMobile * 0.65, 50,
-                                    () {
-                                  int proximaSenha = doc?.docs[tamanhoDocumento - 1]
-                                      .get("proximaSenha");
-                                  Map<String, dynamic> data = {
-                                    "nome":
-                                        ScopedModel.of<UsuarioModel>(context)
-                                            .userData["nome"],
-                                    "matricula":
-                                        ScopedModel.of<UsuarioModel>(context)
-                                            .userData["matricula"],
-                                    "senha": proximaSenha
-                                  };
-                                  ScopedModel.of<UsuarioModel>(context)
-                                      .isLoading = true;
-                                  fireStore
-                                      .collection("fila")
-                                      .doc(proximaSenha.toString())
-                                      .set(data)
-                                      .then((value) {
-                                    fireStore
-                                        .collection("fila")
-                                        .doc("placar")
-                                        .update(
-                                            {"proximaSenha": proximaSenha + 1});
-                                    ScopedModel.of<UsuarioModel>(context).isLoading =false;
-                                    ScopedModel.of<UsuarioModel>(context).senha=proximaSenha;
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ViewPanel()));
-                                  });
-                                })
-                              ],
+                            int tamanhoDocumento =
+                                doc?.size != null ? (doc!.size - 1) : 0;
+                            String tamanhoFila = doc?.size != null
+                                ? (doc!.size - 1).toString()
+                                : " ";
+                            return StreamBuilder<
+                                QuerySnapshot<Map<String, dynamic>>>(
+                              stream:
+                                  fireStore.collection("aberto").snapshots(),
+                              builder: (context, snapshotGuiche) {
+                                switch (snapshotGuiche.connectionState) {
+                                  case ConnectionState.waiting:
+                                  case ConnectionState.none:
+                                    return containerLoading();
+                                  default:
+                                    QuerySnapshot<Map<String, dynamic>>? aberto =
+                                        snapshotGuiche.data;
+                                    bool guicheDisponivel =
+                                    aberto?.size != 0 ? true : false;
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Pessoas na fila:",
+                                          style: TextStyle(
+                                              color: Colors.blueGrey,
+                                              fontSize: fontSize().titulo36,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Divider(color: Colors.transparent),
+                                        Text(tamanhoFila,
+                                            style: TextStyle(
+                                                color: Colors.blueGrey,
+                                                fontSize: fontSize().titulo36,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic)),
+                                        Divider(color: Colors.transparent),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text("Guiche Disponivel! ",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        fontSize().texto)),
+                                            Icon(
+                                              Icons.circle,
+                                              color: guicheDisponivel
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(color: Colors.transparent),
+                                        button("Gerar Senha",
+                                            widthMobile * 0.65, 50, () {
+                                          int proximaSenha = doc
+                                              ?.docs[tamanhoDocumento]
+                                              .get("proximaSenha");
+                                          print(guicheDisponivel);
+                                          if (guicheDisponivel) {
+                                            Map<String, dynamic> data = {
+                                              "nome":
+                                                  ScopedModel.of<UsuarioModel>(
+                                                          context)
+                                                      .userData["nome"],
+                                              "matricula":
+                                                  ScopedModel.of<UsuarioModel>(
+                                                          context)
+                                                      .userData["matricula"],
+                                              "senha": proximaSenha
+                                            };
+                                            ScopedModel.of<UsuarioModel>(
+                                                    context)
+                                                .isLoading = true;
+                                            fireStore
+                                                .collection("fila")
+                                                .doc(proximaSenha.toString())
+                                                .set(data)
+                                                .then((value) {
+                                              fireStore
+                                                  .collection("fila")
+                                                  .doc("placar")
+                                                  .update({
+                                                "proximaSenha": proximaSenha + 1
+                                              });
+                                              ScopedModel.of<UsuarioModel>(
+                                                      context)
+                                                  .isLoading = false;
+                                              ScopedModel.of<UsuarioModel>(
+                                                      context)
+                                                  .senha = proximaSenha;
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewPanel()));
+                                            });
+                                          } else
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Não há mais guinche atendendo tente mais tarde!"),
+                                              backgroundColor: Colors.red,
+                                              duration: Duration(seconds: 4),
+                                            ));
+                                        })
+                                      ],
+                                    );
+                                }
+                              },
                             );
                         }
                       })),

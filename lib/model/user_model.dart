@@ -11,8 +11,11 @@ class UsuarioModel extends Model {
 
   bool isLoading = false;
   int? senha;
+  Map<String, dynamic>? painel = Map();
+  String? proximoFila;
   String? guiche;
-
+  bool guicheIsOpen = false;
+  int tamanhoFila= 0;
 
   @override
   void addListener(VoidCallback listener) {
@@ -22,6 +25,33 @@ class UsuarioModel extends Model {
 
   bool isConected() {
     return firebaseUser != null;
+  }
+
+  void abrirGuiche() {
+    String nomeUsuario = userData["nome"];
+    firestore.collection("aberto").doc(nomeUsuario).set({}).then((value) {
+      this.guicheIsOpen = true;
+      notifyListeners();
+      if(this.tamanhoFila<=0)resetarPainel();
+    });
+  }
+
+  void fecharGuiche() {
+    String nomeUsuario = userData["nome"];
+    firestore.collection("aberto").doc(nomeUsuario).delete().then((value) {
+      this.guicheIsOpen = false;
+      notifyListeners();
+    });
+  }
+
+  void resetarPainel() {
+    firestore.collection("fila").doc("placar").update({
+      "guicheAnterior": "0",
+      "guicheAtual": "0",
+      "proximaSenha": 1,
+      "senhaAnterior": "0",
+      "senhaAtual": "0",
+    });
   }
 
   void singUp(Map<String, dynamic> userData, String password,
@@ -51,7 +81,7 @@ class UsuarioModel extends Model {
     notifyListeners();
     _auth
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((user) async{
+        .then((user) async {
       firebaseUser = user.user;
       await _loadCurrentUser();
       onSucces();
@@ -66,7 +96,7 @@ class UsuarioModel extends Model {
     });
   }
 
-  void singOut()async{
+  void singOut() async {
     await _auth.signOut();
     userData = Map();
     firebaseUser = null;
@@ -82,8 +112,10 @@ class UsuarioModel extends Model {
     if (firebaseUser == null) firebaseUser = await _auth.currentUser;
     if (firebaseUser != null) {
       if (userData["nome"] == null) {
-        DocumentSnapshot docUser = await FirebaseFirestore.instance.collection("usuarios").
-        doc(firebaseUser!.email).get();
+        DocumentSnapshot docUser = await FirebaseFirestore.instance
+            .collection("usuarios")
+            .doc(firebaseUser!.email)
+            .get();
         userData["nome"] = docUser.get("nome");
         userData["email"] = docUser.get("email");
         userData["matricula"] = docUser.get("matricula");
@@ -93,5 +125,18 @@ class UsuarioModel extends Model {
     notifyListeners();
   }
 
-  void passowordChange() {}
+  void passowordChange(
+      String email, VoidCallback onSucces, VoidCallback onFail) {
+    this.isLoading = true;
+    notifyListeners();
+    _auth.sendPasswordResetEmail(email: email).then((value) {
+      onSucces();
+      this.isLoading = false;
+      notifyListeners();
+    }).catchError((error) {
+      onFail();
+      this.isLoading = false;
+      notifyListeners();
+    });
+  }
 }

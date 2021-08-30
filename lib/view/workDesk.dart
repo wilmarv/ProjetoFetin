@@ -15,7 +15,6 @@ class ViewWorkDesk extends StatefulWidget {
 
 class _ViewWorkDeskState extends State<ViewWorkDesk> {
   final _fireStore = FirebaseFirestore.instance;
-
   @override
   Widget build(BuildContext context) {
     double weightMobile = MediaQuery.of(context).size.width;
@@ -62,17 +61,46 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
                         )),
                   ),
                 ),
-                Lista(_fireStore),
+                listarFila(_fireStore),
               ],
             ),
             Container(
               padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  button("Abrir", 140, 50, () {}),
-                  button("Proximo", 150, 50, () {}),
-                ],
+              child: ScopedModelDescendant<UsuarioModel>(
+                builder: (context,child,model){
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      button(model.guicheIsOpen?"fechar":"Abrir", 140, 50, () {
+                        print(model.guicheIsOpen);
+                        if (model.guicheIsOpen)
+                          model.fecharGuiche();
+                        else
+                          model.abrirGuiche();
+                      }),
+                      button("Proximo", 150, 50, () {
+                        String? proximoFila =
+                            model.proximoFila;
+                        if (proximoFila != "")
+                          _fireStore
+                              .collection("fila")
+                              .doc(proximoFila)
+                              .delete()
+                              .then((value) {
+                            _fireStore.collection("fila").doc("placar").update({
+                              "senhaAtual": proximoFila,
+                              "guicheAtual":
+                              model.guiche,
+                              "senhaAnterior": model.painel?["senhaAtual"],
+                              "guicheAnterior":
+                              model
+                                  .painel?["guicheAtual"],
+                            });
+                          });
+                      }),
+                    ],
+                  );
+                },
               ),
             )
           ],
@@ -82,25 +110,34 @@ class _ViewWorkDeskState extends State<ViewWorkDesk> {
   }
 }
 
-Widget Lista(firestore) {
+Widget listarFila(firestore) {
+  final _fireStore = FirebaseFirestore.instance;
   return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-    stream: firestore.collection("fila").snapshots(),
+    stream: _fireStore.collection("fila").orderBy("senha").snapshots(),
     builder: (context, snapshot) {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
         case ConnectionState.none:
-          return Center(child: CircularProgressIndicator());
+          return containerLoading();
         default:
           QuerySnapshot<Map<String, dynamic>>? doc = snapshot.data;
           int tamanhoFila = doc?.size != null ? (doc!.size - 1) : 0;
+          ScopedModel.of<UsuarioModel>(context).tamanhoFila = tamanhoFila;
+          Map<String, dynamic>? painel = doc?.docs[0].data();
+          ScopedModel.of<UsuarioModel>(context).painel = painel;
+          if (tamanhoFila >= 1)
+            ScopedModel.of<UsuarioModel>(context).proximoFila =
+                doc?.docs[1].get("senha").toString();
+          else
+            ScopedModel.of<UsuarioModel>(context).proximoFila = "";
           return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount:tamanhoFila,
+              itemCount: tamanhoFila,
               itemBuilder: (context, index) {
-                int senha = doc?.docs[index].get("senha");
-                String nome = doc?.docs[index].get("nome");
-                String matricula = doc?.docs[index].get("matricula");
+                int senha = doc?.docs[index + 1].get("senha");
+                String nome = doc?.docs[index + 1].get("nome");
+                String matricula = doc?.docs[index + 1].get("matricula");
                 return Card(
                     child: Container(
                         padding: EdgeInsets.all(10),
