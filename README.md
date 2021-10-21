@@ -2,15 +2,9 @@
 
 App Mobile desenvolvido esperando que flexibilize as filas de esperas
 
-## Getting Started
+## Apresentado na 40ª FETIN 2021
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![login](https://user-images.githubusercontent.com/64598132/138203397-168bb8fc-55c3-4441-b166-59cba5ddf19e.jpeg)
+![entrada](https://user-images.githubusercontent.com/64598132/138203406-7b431e47-1cba-4acd-9ecf-a9ce08edde72.jpeg)
+![painel](https://user-images.githubusercontent.com/64598132/138203418-b7d7e430-ce27-4356-ae7c-b605f88664e4.jpeg)
+![fila](https://user-images.githubusercontent.com/64598132/138203429-e7a52c6c-a4ba-4a11-b0f5-7319a5d0550d.jpeg)
